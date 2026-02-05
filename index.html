@@ -1,0 +1,2503 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אפס חיכוך | מדריך מעשי</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #0a0a0f;
+            --void-deep: #050508;
+            --energy: #22C55E;
+            --energy-glow: rgba(34, 197, 94, 0.3);
+            --energy-soft: rgba(34, 197, 94, 0.1);
+            --text: #e8e8ec;
+            --text-dim: #6b6b7b;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --tip-bg: rgba(59, 130, 246, 0.1);
+            --tip-border: rgba(59, 130, 246, 0.3);
+            --tip-color: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--void);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* Star Field Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: var(--base-opacity); }
+            50% { opacity: var(--peak-opacity); }
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--energy-soft);
+            top: -200px;
+            right: -200px;
+            animation: float-orb 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(34, 197, 94, 0.05);
+            bottom: 20%;
+            left: -100px;
+            animation: float-orb 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 10%;
+            position: relative;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: url('assets/hero-bg.jpg') center center / cover no-repeat;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(5, 15, 10, 0.3) 0%, rgba(5, 15, 10, 0.7) 50%, var(--void) 100%);
+            pointer-events: none;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-family: 'Heebo', sans-serif;
+            font-weight: 900;
+            font-size: clamp(3.5rem, 12vw, 9rem);
+            color: var(--energy);
+            text-shadow: 0 0 80px var(--energy-glow), 0 0 120px var(--energy-soft);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            animation: glow-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 80px var(--energy-glow); }
+            50% { text-shadow: 0 0 120px var(--energy-glow), 0 0 200px var(--energy-soft); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-message {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 48px;
+        }
+
+        .hero-message span {
+            color: var(--energy);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--energy);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Resources Section */
+        .resources {
+            min-height: auto;
+            padding: 50px 10%;
+            background: linear-gradient(180deg, var(--void-deep) 0%, var(--void) 100%);
+        }
+
+        .resources-title {
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--text-dim);
+        }
+
+        .resources-grid {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 28px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            text-decoration: none;
+            color: var(--text);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .resource-link:hover {
+            border-color: var(--energy);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 50px rgba(34, 197, 94, 0.15);
+        }
+
+        .resource-link .icon {
+            font-size: 1.8rem;
+        }
+
+        .resource-link .label {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .resource-link .desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .section-title span {
+            color: var(--energy);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 50px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Workshop Flow */
+        .workshop-flow {
+            padding: 80px 5%;
+            min-height: auto;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .flow-step {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 28px;
+            align-items: start;
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .flow-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step-number-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step-number {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: var(--energy);
+            color: var(--void);
+            font-family: 'Rubik Mono One', monospace;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px var(--energy-glow);
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .step-line {
+            width: 2px;
+            height: 100%;
+            min-height: 100px;
+            background: linear-gradient(to bottom, var(--energy), var(--energy-soft), transparent);
+            margin-top: -8px;
+        }
+
+        .flow-step:last-child .step-line {
+            display: none;
+        }
+
+        .step-content {
+            padding: 4px 0 36px;
+        }
+
+        .step-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .step-title .emoji {
+            margin-left: 8px;
+        }
+
+        .step-description {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .step-details {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 16px;
+            backdrop-filter: blur(20px);
+        }
+
+        .step-details ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .step-details li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .step-details li::before {
+            content: '→';
+            color: var(--energy);
+            font-weight: bold;
+        }
+
+        /* How To Box */
+        .how-to {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.03) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .how-to-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--energy);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .how-to-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .how-to-steps li {
+            font-size: 0.85rem;
+            color: var(--text);
+            padding-right: 4px;
+        }
+
+        .how-to-steps li::before {
+            content: counter(step) ". ";
+            counter-increment: step;
+            color: var(--energy);
+            font-weight: 600;
+        }
+
+        .how-to-steps {
+            counter-reset: step;
+            list-style: none;
+        }
+
+        /* Skill Box */
+        .skill-box {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border: 1px solid var(--energy);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .skill-box-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--energy);
+            margin-bottom: 10px;
+        }
+
+        .skill-command {
+            font-family: 'Rubik Mono One', monospace;
+            font-size: 0.9rem;
+            background: var(--void);
+            padding: 10px 18px;
+            border-radius: 6px;
+            color: var(--energy);
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .skill-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .skill-feature {
+            padding: 4px 10px;
+            background: var(--void);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        /* Install Steps */
+        .install-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .install-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .install-num {
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
+            border-radius: 50%;
+            background: var(--energy);
+            color: var(--void);
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .install-content {
+            flex: 1;
+        }
+
+        .install-content strong {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .install-code {
+            margin-top: 6px;
+            padding: 10px 14px;
+            background: var(--void);
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--energy);
+            border: 1px solid var(--border);
+            word-break: break-all;
+        }
+
+        .install-details {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .install-details code {
+            background: var(--void);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--energy);
+            font-size: 0.8rem;
+        }
+
+        /* Tip Box */
+        .tip-box {
+            background: var(--tip-bg);
+            border: 1px solid var(--tip-border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        .tip-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--tip-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tip-content {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .tip-content code {
+            background: rgba(96, 165, 250, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--tip-color);
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        /* Phase Divider */
+        .phase-divider {
+            text-align: center;
+            padding: 50px 0;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .phase-divider::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 35px;
+            background: linear-gradient(to bottom, transparent, var(--energy));
+        }
+
+        .phase-divider::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 35px;
+            background: linear-gradient(to top, transparent, var(--energy));
+        }
+
+        .phase-title {
+            display: inline-block;
+            padding: 14px 28px;
+            background: var(--energy);
+            color: var(--void);
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            padding: 80px 5%;
+            min-height: auto;
+            background: linear-gradient(180deg, var(--void) 0%, var(--void-deep) 100%);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tip-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .tip-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tip-card:hover {
+            border-color: var(--tip-border);
+            transform: translateY(-4px);
+        }
+
+        .tip-card-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .tip-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--tip-color);
+        }
+
+        .tip-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .tip-card-code {
+            background: var(--void);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--energy);
+        }
+
+        /* Cumulative Effect Section */
+        .cumulative {
+            background: radial-gradient(ellipse at center, var(--energy-soft) 0%, var(--void) 60%);
+            text-align: center;
+            min-height: auto;
+            padding: 80px 10%;
+        }
+
+        .cumulative-visual {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 14px;
+            margin: 50px 0;
+            height: 220px;
+        }
+
+        .cumulative-bar {
+            width: 50px;
+            background: linear-gradient(to top, var(--energy), var(--energy-glow));
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 10px;
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cumulative-bar.visible {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+        .cumulative-bar:nth-child(1) { height: 35px; transition-delay: 0.1s; }
+        .cumulative-bar:nth-child(2) { height: 55px; transition-delay: 0.15s; }
+        .cumulative-bar:nth-child(3) { height: 80px; transition-delay: 0.2s; }
+        .cumulative-bar:nth-child(4) { height: 105px; transition-delay: 0.25s; }
+        .cumulative-bar:nth-child(5) { height: 135px; transition-delay: 0.3s; }
+        .cumulative-bar:nth-child(6) { height: 165px; transition-delay: 0.35s; }
+        .cumulative-bar:nth-child(7) { height: 195px; transition-delay: 0.4s; }
+        .cumulative-bar:nth-child(8) { height: 220px; transition-delay: 0.45s; }
+
+        .cumulative-bar .label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.7rem;
+            color: var(--void);
+            font-weight: 600;
+        }
+
+        .cumulative-message {
+            font-size: 1.4rem;
+            color: var(--text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cumulative-message strong {
+            color: var(--energy);
+        }
+
+        /* Chrome Extension Section */
+        .chrome-section {
+            padding: 80px 5%;
+            min-height: auto;
+            background: linear-gradient(180deg, var(--void-deep) 0%, var(--void) 100%);
+        }
+
+        .chrome-content {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+        }
+
+        .chrome-intro {
+            margin-bottom: 32px;
+        }
+
+        .chrome-icon-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .chrome-big-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .chrome-icon-row h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--energy);
+            margin-bottom: 8px;
+        }
+
+        .chrome-icon-row p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .chrome-icon-row p strong {
+            color: var(--text);
+        }
+
+        .chrome-how, .chrome-mcp, .chrome-capabilities {
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .chrome-how h4, .chrome-mcp h4, .chrome-capabilities h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .chrome-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chrome-flow-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .chrome-flow-num {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            background: var(--energy);
+            color: var(--void);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .chrome-flow-item strong {
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .chrome-flow-item p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .chrome-flow-item code {
+            background: var(--void);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--energy);
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .chrome-mcp p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .chrome-mcp p strong {
+            color: var(--energy);
+        }
+
+        .mcp-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            background: var(--void);
+            border-radius: 12px;
+        }
+
+        .mcp-node {
+            padding: 10px 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .mcp-middle {
+            background: var(--energy);
+            color: var(--void);
+            border-color: var(--energy);
+        }
+
+        .mcp-arrow {
+            color: var(--energy);
+            font-size: 1.2rem;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .capability-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+            background: var(--void);
+            border-radius: 10px;
+        }
+
+        .capability-item > span {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .capability-item strong {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .capability-item p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .chrome-example-box {
+            margin-top: 28px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.03) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+        }
+
+        .chrome-example-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--energy);
+            margin-bottom: 10px;
+        }
+
+        .chrome-example-box p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .chrome-example-result {
+            color: var(--text) !important;
+        }
+
+        .chrome-example-result strong {
+            color: var(--energy);
+        }
+
+        @media (max-width: 768px) {
+            .chrome-content {
+                padding: 24px 18px;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chrome-icon-row {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .mcp-diagram {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Ladder Section */
+        .ladder-section {
+            padding: 80px 5%;
+            min-height: auto;
+        }
+
+        .ladder-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .ladder-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 28px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .ladder-step.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .ladder-step:hover {
+            border-color: var(--energy);
+            transform: translateX(8px);
+        }
+
+        .ladder-arrow {
+            font-size: 1.5rem;
+            color: var(--energy);
+            padding: 10px 0;
+        }
+
+        .ladder-icon {
+            font-size: 1.8rem;
+        }
+
+        .ladder-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .ladder-content p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* Result Section */
+        .result {
+            text-align: center;
+            min-height: auto;
+            padding: 80px 10%;
+        }
+
+        .result-equation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .equation-part {
+            padding: 14px 24px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .equation-operator {
+            font-size: 1.5rem;
+            color: var(--energy);
+        }
+
+        .equation-result {
+            padding: 16px 32px;
+            background: var(--energy);
+            color: var(--void);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .result-multiplier {
+            font-family: 'Rubik Mono One', monospace;
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--energy);
+            text-shadow: 0 0 60px var(--energy-glow);
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        /* Ecosystem Intro Section */
+        .ecosystem-intro {
+            padding: 80px 5%;
+            min-height: auto;
+        }
+
+        .ecosystem-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: right;
+            direction: rtl;
+            background: linear-gradient(145deg, var(--card) 0%, var(--card-hover) 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ecosystem-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--energy), transparent);
+        }
+
+        .ecosystem-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .ecosystem-title span {
+            color: var(--energy);
+        }
+
+        .ecosystem-explanation {
+            line-height: 1.9;
+            color: var(--text-dim);
+            font-size: 1.05rem;
+        }
+
+        .ecosystem-explanation p {
+            margin-bottom: 20px;
+        }
+
+        .ecosystem-explanation .lead {
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .ecosystem-explanation strong {
+            color: var(--energy);
+        }
+
+        .ecosystem-explanation .highlight {
+            background: rgba(34, 197, 94, 0.1);
+            border-right: 3px solid var(--energy);
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 30px 0;
+            font-size: 1.15rem;
+            color: var(--text);
+        }
+
+        .ecosystem-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 30px 0;
+            padding: 20px;
+            background: var(--void);
+            border-radius: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .timeline-marker {
+            min-width: 80px;
+            padding: 6px 12px;
+            background: var(--energy);
+            color: var(--void);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .timeline-text {
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .ecosystem-cta {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border: 1px solid var(--energy);
+            border-radius: 16px;
+        }
+
+        .cta-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 15px var(--energy-glow));
+        }
+
+        .cta-content h3 {
+            font-size: 1.2rem;
+            color: var(--energy);
+            margin-bottom: 8px;
+        }
+
+        .cta-content p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .cta-content p strong {
+            color: var(--text);
+        }
+
+        .dev-habits {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--void);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .dev-habits h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .dev-icon {
+            font-size: 1.5rem;
+        }
+
+        .dev-habits > p {
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .habit-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .habit-item {
+            padding: 16px 20px;
+            background: var(--card);
+            border-radius: 10px;
+            border-right: 3px solid var(--energy);
+        }
+
+        .habit-title {
+            font-weight: 600;
+            color: var(--energy);
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .habit-desc {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .habit-desc strong {
+            color: var(--text);
+        }
+
+        .habit-note {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .habit-note strong {
+            color: var(--energy);
+        }
+
+        @media (max-width: 768px) {
+            .ecosystem-content {
+                padding: 30px 20px;
+            }
+
+            .ecosystem-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dev-habits {
+                padding: 20px;
+            }
+        }
+
+        /* Examples Section */
+        .examples {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .examples-intro {
+            max-width: 700px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .example-card {
+            background: linear-gradient(145deg, var(--card) 0%, var(--card-hover) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: right;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--energy), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--energy);
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.15);
+        }
+
+        .example-card:hover::before {
+            opacity: 1;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .example-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px var(--energy-glow));
+        }
+
+        .example-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .example-role {
+            font-size: 0.85rem;
+            color: var(--energy);
+            margin-top: 2px;
+        }
+
+        .example-scenario {
+            background: var(--void);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-right: 3px solid var(--energy);
+        }
+
+        .example-scenario-label {
+            font-size: 0.75rem;
+            color: var(--energy);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .example-scenario-text {
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .example-ecosystem {
+            margin-top: 16px;
+        }
+
+        .example-ecosystem-title {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ecosystem-components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .ecosystem-tag {
+            padding: 4px 10px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--energy);
+        }
+
+        .example-result {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .example-result-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .example-result-text {
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .example-result-text strong {
+            color: var(--energy);
+        }
+
+        @media (max-width: 768px) {
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        footer .brand {
+            color: var(--energy);
+            font-weight: 600;
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section {
+                padding: 50px 5%;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .flow-step {
+                grid-template-columns: 45px 1fr;
+                gap: 14px;
+            }
+
+            .step-number {
+                width: 38px;
+                height: 38px;
+                font-size: 0.95rem;
+            }
+
+            .step-line {
+                min-height: 70px;
+            }
+
+            .step-title {
+                font-size: 1.15rem;
+            }
+
+            .cumulative-bar {
+                width: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Star Field -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <span class="hero-badge reveal">מדריך מעשי לבניית אקוסיסטם</span>
+            <h1 class="reveal">אפס חיכוך</h1>
+            <p class="hero-subtitle reveal">מהתקנה ועד למערכת שעובדת לבד</p>
+            <p class="hero-message reveal">זה לא <span>הכלי</span> — זה <span>הסביבה</span></p>
+            <div class="scroll-indicator">
+                <span>גלול למטה</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="resources" id="resources">
+            <h3 class="resources-title reveal">לא התקנתם עדיין?</h3>
+            <div class="resources-grid">
+                <a href="https://aviz85.github.io/claude-code-windows-guide/he.html" target="_blank" class="resource-link reveal">
+                    <span class="icon">📦</span>
+                    <div>
+                        <div class="label">מדריך התקנה</div>
+                        <div class="desc">Claude Code על Windows</div>
+                    </div>
+                </a>
+                <a href="https://aviz85.github.io/claude-skills-library" target="_blank" class="resource-link reveal">
+                    <span class="icon">🎯</span>
+                    <div>
+                        <div class="label">ספריית סקילים</div>
+                        <div class="desc">סקילים מוכנים להתקנה</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Why Ecosystem Section -->
+        <section class="ecosystem-intro" id="why">
+            <div class="ecosystem-content reveal">
+                <h2 class="ecosystem-title">למה לבנות <span>אקוסיסטם</span>?</h2>
+
+                <div class="ecosystem-explanation">
+                    <p class="lead">
+                        <strong>ההשקעה הראשונית קטנה.</strong> מתחילים מתיקייה פשוטה, קובץ CLAUDE.md, וכמה קבצי מידע.
+                        זה הכל.
+                    </p>
+
+                    <p>
+                        אבל משהו קורה כשעובדים על <strong>קבצים מקומיים</strong> במקום לשוחח עם צ'אט חד-פעמי.
+                        הסוכן מתחיל <strong>להכיר אותך</strong>. הוא יודע את הסגנון שלך, את ההעדפות, את הדרך שאתה עובד.
+                        כל שיחה בונה על הקודמת.
+                    </p>
+
+                    <div class="ecosystem-timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-marker">שבוע 1</span>
+                            <span class="timeline-text">תיקייה + מידע בסיסי + CLAUDE.md ראשוני</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-marker">שבוע 2</span>
+                            <span class="timeline-text">סקיל ראשון שחוסך עבודה חוזרת</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-marker">חודש</span>
+                            <span class="timeline-text">מערכת שלמה שעובדת בשבילך</span>
+                        </div>
+                    </div>
+
+                    <p class="highlight">
+                        ואז מגלים: <strong>נבנה פה משהו עוצמתי.</strong>
+                        לא כלי חד-פעמי — אלא שותף שמכיר את העולם שלך.
+                    </p>
+                </div>
+
+                <div class="dev-habits">
+                    <h3><span class="dev-icon">👨‍💻</span> הרגלים מעולם התוכנה</h3>
+                    <p>אנחנו מאמצים כמה הרגלים שהגיעו מעולם הפיתוח — לא צריך להיות מתכנתים כדי ליהנות מהם:</p>
+
+                    <div class="habit-grid">
+                        <div class="habit-item">
+                            <div class="habit-title">📝 קבצי Markdown (.md)</div>
+                            <div class="habit-desc">קבצי טקסט פשוטים עם עיצוב בסיסי. הסוכן קורא אותם בקלות, וגם אתם. לא צריך Word או Google Docs.</div>
+                        </div>
+
+                        <div class="habit-item">
+                            <div class="habit-title">🔄 סנכרון עם GitHub</div>
+                            <div class="habit-desc">גיבוי אוטומטי + היסטוריית גרסאות + אפשרות לעבוד מכמה מחשבים. הפרוייקט שלכם תמיד בטוח בענן.</div>
+                        </div>
+
+                        <div class="habit-item">
+                            <div class="habit-title">🚫 .gitignore</div>
+                            <div class="habit-desc">קובץ שאומר ל-GitHub מה <strong>לא</strong> לסנכרן: קבצים כבדים (תמונות, PDF), קבצים רגישים (סיסמאות, API keys). אלה צריכים גיבוי במקום אחר (Google Drive, Dropbox).</div>
+                        </div>
+                    </div>
+
+                    <p class="habit-note">💡 <strong>הרעיון:</strong> הכלים האלה הם הסיבה שמפתחים יכולים לעבוד על פרוייקטים מורכבים בלי לאבד שום דבר. עכשיו זה זמין גם לכם.</p>
+                </div>
+
+                <div class="ecosystem-cta">
+                    <span class="cta-icon">🚀</span>
+                    <div class="cta-content">
+                        <h3>בסדנה הזו נתחיל פרוייקט אמיתי</h3>
+                        <p>כל אחד יבחר עכשיו משהו <strong>אישי</strong> — וימשיך לבנות אותו אחרי הסדנה.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workshop Flow Section -->
+        <section class="workshop-flow" id="flow">
+            <h2 class="section-title reveal">מסלול <span>הסדנה</span></h2>
+            <p class="section-subtitle reveal">שלב אחרי שלב — נבנה יחד אקוסיסטם אמיתי</p>
+
+            <div class="flow-steps">
+
+                <!-- Phase 1: Foundation -->
+                <div class="phase-divider reveal">
+                    <span class="phase-title">שלב א׳: מציאת הפרוייקט</span>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="flow-step" data-delay="0">
+                    <div class="step-number-container">
+                        <div class="step-number">1</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">מתחילים מהכאב <span class="emoji">🎯</span></h3>
+                        <p class="step-description">
+                            לא מתחילים מהכלי — מתחילים מהבעיה.<br>
+                            מה מתיש אתכם? מה לוקח יותר מדי זמן?
+                        </p>
+                        <div class="step-details">
+                            <ul>
+                                <li>חשבו על משימה שחוזרת על עצמה כל יום/שבוע</li>
+                                <li>משהו שאתם עושים ביד אבל שונאים</li>
+                                <li>תהליך שיש בו הרבה שלבים קטנים</li>
+                            </ul>
+                        </div>
+
+                        <div class="skill-box">
+                            <div class="skill-box-title">
+                                <span>🔮</span>
+                                סקיל לניתוח התאמה למקצוע שלך: <code>/claudability-analyzer</code>
+                            </div>
+
+                            <div class="install-steps">
+                                <div class="install-step">
+                                    <span class="install-num">1</span>
+                                    <div class="install-content">
+                                        <strong>הוסיפו את ספריית הסקילים</strong>
+                                        <div class="install-code">/plugin marketplace add aviz85/claude-skills-library</div>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <span class="install-num">2</span>
+                                    <div class="install-content">
+                                        <strong>בחרו את הסקיל</strong>
+                                        <div class="install-details">
+                                            הקלידו <code>/plugin</code> → לחצו ימינה ל-marketplace → בחרו <code>aviz-skills-library</code> → browse plugins → בחרו <code>claudability-analyzer</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <span class="install-num">3</span>
+                                    <div class="install-content">
+                                        <strong>הפעילו מחדש</strong>
+                                        <div class="install-details">סגרו Claude Code → פתחו מחדש → הקלידו <code>/skills</code> לוודא שמופיע</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flow-step" data-delay="100">
+                    <div class="step-number-container">
+                        <div class="step-number">2</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">יוצרים תיקייה <span class="emoji">📁</span></h3>
+                        <p class="step-description">
+                            הפרוייקט צריך בית. תיקייה נפרדת שתכיל את הכל.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 איך עושים את זה</div>
+                            <ol class="how-to-steps">
+                                <li>פתחו את הטרמינל (או VS Code)</li>
+                                <li>צרו תיקייה חדשה: <code>mkdir ~/projects/my-project</code></li>
+                                <li>היכנסו אליה: <code>cd ~/projects/my-project</code></li>
+                                <li>הפעילו את קלוד: <code>claude</code></li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 טיפ</div>
+                            <div class="tip-content">
+                                אפשר פשוט לבקש מקלוד: ״צור לי תיקייה חדשה לפרוייקט ניהול לקוחות״
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flow-step" data-delay="200">
+                    <div class="step-number-container">
+                        <div class="step-number">3</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">מזינים מידע <span class="emoji">📥</span></h3>
+                        <p class="step-description">
+                            הסוכן צריך להכיר את הפרוייקט. העתיקו קבצים רלוונטיים או ספרו לו.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 מה להכניס לתיקייה</div>
+                            <ol class="how-to-steps">
+                                <li>קבצי אקסל/מסמכים רלוונטיים</li>
+                                <li>דוגמאות של מה שאתם עושים</li>
+                                <li>רשימת לקוחות/משימות/תוצרים</li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 למה קבצי טקסט?</div>
+                            <div class="tip-content">
+                                קלוד קורא קבצי טקסט (<code>.md</code>, <code>.txt</code>) בקלות.<br>
+                                הוא יחפש אוטומטית מידע בקבצים — בלי סקריפטים.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flow-step" data-delay="300">
+                    <div class="step-number-container">
+                        <div class="step-number">4</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">יוצרים CLAUDE.md <span class="emoji">📄</span></h3>
+                        <p class="step-description">
+                            הקובץ הכי חשוב — כאן מלמדים את קלוד מי אתם ומה הפרוייקט.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 מה לכתוב ב-CLAUDE.md</div>
+                            <ol class="how-to-steps">
+                                <li>מי אתה — שם, עסק, סגנון עבודה</li>
+                                <li>מה הפרוייקט — מטרה, לקוחות, תוצרים</li>
+                                <li>כללים — איך אתה אוהב שדברים ייעשו</li>
+                                <li>מידע קבוע — פרטי התקשרות, תמחור, תבניות</li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 טיפ</div>
+                            <div class="tip-content">
+                                אפשר לבקש מקלוד: ״עזור לי לכתוב CLAUDE.md לפרוייקט הזה״ והוא ישאל אתכם שאלות.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Skills -->
+                <div class="phase-divider reveal">
+                    <span class="phase-title">שלב ב׳: בניית סקילים</span>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flow-step" data-delay="400">
+                    <div class="step-number-container">
+                        <div class="step-number">5</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">הסקיל הראשון <span class="emoji">⚡</span></h3>
+                        <p class="step-description">
+                            בוחרים משימה אחת חוזרת — והופכים אותה לסקיל. תוך כדי תנועה.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 איך בונים סקיל</div>
+                            <ol class="how-to-steps">
+                                <li>עשו את המשימה עם קלוד פעם אחת</li>
+                                <li>בקשו: ״הפוך את מה שעכשיו עשינו לסקיל״</li>
+                                <li>בדקו שהסקיל עובד</li>
+                                <li>שפרו אם צריך</li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 TSK — קיצור דרך</div>
+                            <div class="tip-content">
+                                כתבו <code>TSK</code> (Tweak Skill) כדי לבקש מקלוד לעדכן את הסקיל הרלוונטי עם מה שלמדתם עכשיו.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="flow-step" data-delay="500">
+                    <div class="step-number-container">
+                        <div class="step-number">6</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">ערימות סקילים <span class="emoji">📚</span></h3>
+                        <p class="step-description">
+                            סקילים שקוראים לסקילים אחרים. תהליכים שלמים.
+                        </p>
+                        <div class="step-details">
+                            <ul>
+                                <li>סקיל ״סגירת עסקה״ = הצעה + חוזה + יומן + ריינדר</li>
+                                <li>סקיל ״סוף יום״ = סיכום + משימות + דוח</li>
+                                <li>כל סקיל חדש משתמש במה שכבר בנינו</li>
+                            </ul>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 DRY — Don't Repeat Yourself</div>
+                            <div class="tip-content">
+                                סקילים = מיקרו-שירותים. אל תשכפלו — הפנו מסקיל אחד לשני.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Connections -->
+                <div class="phase-divider reveal">
+                    <span class="phase-title">שלב ג׳: חיבורים לעולם</span>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="flow-step" data-delay="600">
+                    <div class="step-number-container">
+                        <div class="step-number">7</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">מתחברים לכלים <span class="emoji">🔌</span></h3>
+                        <p class="step-description">
+                            וואטסאפ, ג׳ימייל, יומן — סקילים מוכנים מהספרייה.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 איך מתקינים סקיל מהספרייה</div>
+                            <ol class="how-to-steps">
+                                <li>היכנסו לספריית הסקילים (קישור למעלה)</li>
+                                <li>מצאו סקיל שאתם צריכים</li>
+                                <li>לחצו על ״התקנה״</li>
+                                <li>הריצו את פקודת ההתקנה בקלוד</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 8 -->
+                <div class="flow-step" data-delay="700">
+                    <div class="step-number-container">
+                        <div class="step-number">8</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">מחקר חיבורים חדשים <span class="emoji">🔍</span></h3>
+                        <p class="step-description">
+                            צריכים חיבור שלא קיים? מחקר משותף עם קלוד.
+                        </p>
+                        <div class="step-details">
+                            <ul>
+                                <li>״תחקור איך להתחבר ל-API של X״</li>
+                                <li>קלוד יחפש דוקומנטציה ודוגמאות</li>
+                                <li>תבנו יחד את החיבור</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4: Advanced -->
+                <div class="phase-divider reveal">
+                    <span class="phase-title">שלב ד׳: מתקדם</span>
+                </div>
+
+                <!-- Step 9 -->
+                <div class="flow-step" data-delay="800">
+                    <div class="step-number-container">
+                        <div class="step-number">9</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">פתרון בעיה → סקיל <span class="emoji">🎁</span></h3>
+                        <p class="step-description">
+                            פותרים בעיה בשיחה? מיד אורזים את הפתרון לסקיל.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 התהליך</div>
+                            <ol class="how-to-steps">
+                                <li>פותרים בעיה דרך שיחה עם קלוד</li>
+                                <li>מזהים את התבנית הכללית</li>
+                                <li>מבקשים: ״ארוז את זה כסקיל״</li>
+                                <li>בפעם הבאה — הסקיל עושה את זה לבד</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 10 -->
+                <div class="flow-step" data-delay="900">
+                    <div class="step-number-container">
+                        <div class="step-number">10</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">גיבוי עם GitHub <span class="emoji">💾</span></h3>
+                        <p class="step-description">
+                            כל פרוייקט מסונכרן ל-GitHub. גיבוי + גרסאות + שיתוף.
+                        </p>
+
+                        <div class="how-to">
+                            <div class="how-to-title">📋 הקמה חד-פעמית</div>
+                            <ol class="how-to-steps">
+                                <li>פתחו חשבון ב-github.com</li>
+                                <li>התקינו gh CLI:<br>
+                                    <span style="color: var(--text-dim); font-size: 0.8rem;">
+                                        Mac: <code>brew install gh</code><br>
+                                        Windows: <code>winget install GitHub.cli</code>
+                                    </span>
+                                </li>
+                                <li>התחברו: <code>gh auth login</code></li>
+                                <li>בקשו מקלוד: ״צור repo ודחוף את הפרוייקט״</li>
+                            </ol>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 טיפ</div>
+                            <div class="tip-content">
+                                ברירת מחדל: <strong>private</strong>. רק אתם רואים את הקוד.<br>
+                                קלוד יוצר <code>.gitignore</code> אוטומטית — לא ידחוף קבצים רגישים.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 11 -->
+                <div class="flow-step" data-delay="1000">
+                    <div class="step-number-container">
+                        <div class="step-number">11</div>
+                    </div>
+                    <div class="step-content">
+                        <h3 class="step-title">מספר פרוייקטים <span class="emoji">🌐</span></h3>
+                        <p class="step-description">
+                            אקוסיסטם של פרוייקטים שעובדים יחד. סקילים גלובליים.
+                        </p>
+                        <div class="step-details">
+                            <ul>
+                                <li>סקילים בתיקיית <code>~/.claude/skills/</code> = זמינים בכל מקום</li>
+                                <li>CLAUDE.md גלובלי ב-<code>~/.claude/</code></li>
+                                <li>כל פרוייקט = CLAUDE.md משלו + גישה לגלובליים</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section class="tips-section" id="tips">
+            <h2 class="section-title reveal">טיפים <span>קטנים</span> שעושים הבדל</h2>
+
+            <div class="tips-grid">
+                <div class="tip-card" data-delay="0">
+                    <div class="tip-card-icon">⚡</div>
+                    <h4 class="tip-card-title">TSK — עדכון סקיל</h4>
+                    <p class="tip-card-desc">למדתם משהו חדש? כתבו TSK וקלוד יעדכן את הסקיל הרלוונטי.</p>
+                    <div class="tip-card-code">TSK</div>
+                </div>
+
+                <div class="tip-card" data-delay="100">
+                    <div class="tip-card-icon">📱</div>
+                    <h4 class="tip-card-title">WAME — שלח לי בוואטסאפ</h4>
+                    <p class="tip-card-desc">רוצים לקבל משהו לוואטסאפ? כתבו WAME והסקיל ישלח.</p>
+                    <div class="tip-card-code">WAME</div>
+                </div>
+
+                <div class="tip-card" data-delay="200">
+                    <div class="tip-card-icon">📝</div>
+                    <h4 class="tip-card-title">קבצי .md</h4>
+                    <p class="tip-card-desc">קלוד אוהב קבצי טקסט. שמרו מידע כ-.md והוא ימצא לבד.</p>
+                    <div class="tip-card-code">clients.md, tasks.md</div>
+                </div>
+
+                <div class="tip-card" data-delay="300">
+                    <div class="tip-card-icon">🔒</div>
+                    <h4 class="tip-card-title">Private Repos</h4>
+                    <p class="tip-card-desc">כל פרוייקט ב-GitHub הוא פרטי כברירת מחדל. רק אתם רואים.</p>
+                    <div class="tip-card-code">gh repo create --private</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chrome Extension Section -->
+        <section class="chrome-section" id="chrome">
+            <h2 class="section-title reveal">קלוד <span>בדפדפן</span></h2>
+            <p class="section-subtitle reveal">Claude in Chrome — כשהסוכן רואה מה שאתה רואה</p>
+
+            <div class="chrome-content reveal">
+                <div class="chrome-intro">
+                    <div class="chrome-icon-row">
+                        <span class="chrome-big-icon">🌐</span>
+                        <div>
+                            <h3>מה זה Claude in Chrome?</h3>
+                            <p>תוסף רשמי של Anthropic לכרום שמאפשר לקלוד קוד <strong>לראות, ללחוץ, להקליד ולנווט</strong> בדפדפן שלכם — בדיוק כמו שאתם עושים.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chrome-how">
+                    <h4>איך זה עובד?</h4>
+                    <div class="chrome-flow">
+                        <div class="chrome-flow-item">
+                            <span class="chrome-flow-num">1</span>
+                            <div>
+                                <strong>מתקינים את התוסף</strong>
+                                <p>מתוך Chrome Web Store — חינם, רשמי של Anthropic</p>
+                            </div>
+                        </div>
+                        <div class="chrome-flow-item">
+                            <span class="chrome-flow-num">2</span>
+                            <div>
+                                <strong>מפעילים עם <code>claude --chrome</code></strong>
+                                <p>או מקלידים <code>/chrome</code> מתוך שיחה קיימת</p>
+                            </div>
+                        </div>
+                        <div class="chrome-flow-item">
+                            <span class="chrome-flow-num">3</span>
+                            <div>
+                                <strong>קלוד רואה את הדפדפן</strong>
+                                <p>מתחבר דרך פרוטוקול MCP — ומקבל גישה לכל מה שפתוח</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chrome-mcp">
+                    <h4>מה זה MCP?</h4>
+                    <p><strong>Model Context Protocol</strong> — פרוטוקול שמאפשר לקלוד להתחבר לכלים חיצוניים. התוסף של כרום הוא שרת MCP שחושף יכולות דפדפן לקלוד קוד.</p>
+                    <div class="mcp-diagram">
+                        <span class="mcp-node">Claude Code</span>
+                        <span class="mcp-arrow">⟷</span>
+                        <span class="mcp-node mcp-middle">MCP</span>
+                        <span class="mcp-arrow">⟷</span>
+                        <span class="mcp-node">Chrome</span>
+                    </div>
+                </div>
+
+                <div class="chrome-capabilities">
+                    <h4>מה קלוד יכול לעשות בדפדפן?</h4>
+                    <div class="capabilities-grid">
+                        <div class="capability-item">
+                            <span>👁️</span>
+                            <div>
+                                <strong>לקרוא דפים</strong>
+                                <p>טקסט, טבלאות, טפסים, כפתורים</p>
+                            </div>
+                        </div>
+                        <div class="capability-item">
+                            <span>🖱️</span>
+                            <div>
+                                <strong>ללחוץ ולהקליד</strong>
+                                <p>מילוי טפסים, ניווט, חיפוש</p>
+                            </div>
+                        </div>
+                        <div class="capability-item">
+                            <span>📸</span>
+                            <div>
+                                <strong>צילומי מסך</strong>
+                                <p>לראות בדיוק מה מופיע על המסך</p>
+                            </div>
+                        </div>
+                        <div class="capability-item">
+                            <span>🔗</span>
+                            <div>
+                                <strong>לנווט בין דפים</strong>
+                                <p>לפתוח טאבים, ללכת קדימה ואחורה</p>
+                            </div>
+                        </div>
+                        <div class="capability-item">
+                            <span>🔐</span>
+                            <div>
+                                <strong>גישה לאתרים מחוברים</strong>
+                                <p>Gmail, Google Docs, Notion — כל מה שאתם מחוברים אליו</p>
+                            </div>
+                        </div>
+                        <div class="capability-item">
+                            <span>🎬</span>
+                            <div>
+                                <strong>הקלטת GIF</strong>
+                                <p>תיעוד פעולות הדפדפן כאנימציה</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chrome-example-box">
+                    <div class="chrome-example-title">💡 דוגמה מהחיים</div>
+                    <p>״קלוד, תיכנס ל-Gmail, תמצא את המייל מהלקוח, תשלוף את הפרטים ותעדכן את קובץ הלקוחות״</p>
+                    <p class="chrome-example-result">קלוד פותח את Gmail, מוצא את המייל, קורא אותו, וחוזר לעדכן את הקובץ — <strong>בלי שנגעתם בדפדפן.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ladder Section -->
+        <section class="ladder-section" id="ladder">
+            <h2 class="section-title reveal">סולם <span>האוטומציה</span></h2>
+            <p class="section-subtitle reveal">המטרה: לטפס מ״עושה״ ל״מאשר״</p>
+
+            <div class="ladder-visual">
+                <div class="ladder-step" data-delay="0">
+                    <span class="ladder-icon">👷</span>
+                    <div class="ladder-content">
+                        <h4>מבצע (Executor)</h4>
+                        <p>אתה עושה הכל ביד</p>
+                    </div>
+                </div>
+                <div class="ladder-arrow">↓</div>
+                <div class="ladder-step" data-delay="100">
+                    <span class="ladder-icon">👔</span>
+                    <div class="ladder-content">
+                        <h4>מנהל (Manager)</h4>
+                        <p>אתה נותן הוראות, קלוד עושה</p>
+                    </div>
+                </div>
+                <div class="ladder-arrow">↓</div>
+                <div class="ladder-step" data-delay="200">
+                    <span class="ladder-icon">🧠</span>
+                    <div class="ladder-content">
+                        <h4>אסטרטג (Strategist)</h4>
+                        <p>אתה מחליט מה, קלוד מחליט איך</p>
+                    </div>
+                </div>
+                <div class="ladder-arrow">↓</div>
+                <div class="ladder-step" data-delay="300">
+                    <span class="ladder-icon">👑</span>
+                    <div class="ladder-content">
+                        <h4>מאשר (Approver)</h4>
+                        <p>קלוד עושה הכל, אתה רק מאשר</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples Section -->
+        <section class="examples" id="examples">
+            <h2 class="section-title reveal">דוגמאות <span>מהחיים</span></h2>
+            <p class="examples-intro reveal">
+                פרוייקט אג'נטי הוא לא קוד. זה אקוסיסטם של ידע, סקילים וכלים שעוטף את הסוכן ומאפשר לו להחליט ולפעול בשבילך.
+                <br>הנה דוגמאות איך אנשים מתחומים שונים בונים פרוייקטים שמשנים להם את החיים.
+            </p>
+
+            <div class="examples-grid">
+                <!-- Example 1: Teacher -->
+                <div class="example-card reveal">
+                    <div class="example-header">
+                        <span class="example-icon">👩‍🏫</span>
+                        <div>
+                            <div class="example-title">המורה שמכירה כל תלמיד</div>
+                            <div class="example-role">מורה לחטיבה / תיכון</div>
+                        </div>
+                    </div>
+                    <div class="example-scenario">
+                        <div class="example-scenario-label">📋 הסיטואציה</div>
+                        <div class="example-scenario-text">
+                            מעלה מבחנים סרוקים לתיקייה. הסוכן מתמלל, בודק תשובות, מזהה דפוסי טעויות של כל תלמיד, ומציע טיפים אישיים להעצמה.
+                        </div>
+                    </div>
+                    <div class="example-ecosystem">
+                        <div class="example-ecosystem-title">🔧 האקוסיסטם שנבנה בהדרגה:</div>
+                        <div class="ecosystem-components">
+                            <span class="ecosystem-tag">CLAUDE.md עם פרופיל כיתה</span>
+                            <span class="ecosystem-tag">סקיל בדיקת מבחנים</span>
+                            <span class="ecosystem-tag">קובץ דפוסים לכל תלמיד</span>
+                            <span class="ecosystem-tag">סקיל המלצות אישיות</span>
+                        </div>
+                    </div>
+                    <div class="example-result">
+                        <div class="example-result-label">התוצאה:</div>
+                        <div class="example-result-text">"ידעתי בדיוק איפה <strong>כל תלמיד נתקע</strong> - בלי לשבת שעות על ניתוח"</div>
+                    </div>
+                </div>
+
+                <!-- Example 2: Wedding Planner -->
+                <div class="example-card reveal">
+                    <div class="example-header">
+                        <span class="example-icon">💒</span>
+                        <div>
+                            <div class="example-title">מתכננת החתונות</div>
+                            <div class="example-role">מארגנת אירועים עצמאית</div>
+                        </div>
+                    </div>
+                    <div class="example-scenario">
+                        <div class="example-scenario-label">📋 הסיטואציה</div>
+                        <div class="example-scenario-text">
+                            מנהלת 8 חתונות במקביל. הסוכן יודע את כל הספקים, התקציבים, הדדליינים, ושולח תזכורות אוטומטיות. "תזכירי לזוג כהן שצריך לאשר תפריט עד מחר".
+                        </div>
+                    </div>
+                    <div class="example-ecosystem">
+                        <div class="example-ecosystem-title">🔧 האקוסיסטם שנבנה בהדרגה:</div>
+                        <div class="ecosystem-components">
+                            <span class="ecosystem-tag">תיקייה לכל אירוע</span>
+                            <span class="ecosystem-tag">רשימת ספקים מועדפים</span>
+                            <span class="ecosystem-tag">סקיל מעקב תקציב</span>
+                            <span class="ecosystem-tag">חיבור WhatsApp</span>
+                            <span class="ecosystem-tag">סקיל תזכורות</span>
+                        </div>
+                    </div>
+                    <div class="example-result">
+                        <div class="example-result-label">התוצאה:</div>
+                        <div class="example-result-text">"הכפלתי את מספר האירועים <strong>בלי להכפיל את השעות</strong>"</div>
+                    </div>
+                </div>
+
+                <!-- Example 3: Parent -->
+                <div class="example-card reveal">
+                    <div class="example-header">
+                        <span class="example-icon">👨‍👩‍👧‍👦</span>
+                        <div>
+                            <div class="example-title">ההורה המאורגן</div>
+                            <div class="example-role">הורה ל-4 ילדים</div>
+                        </div>
+                    </div>
+                    <div class="example-scenario">
+                        <div class="example-scenario-label">📋 הסיטואציה</div>
+                        <div class="example-scenario-text">
+                            מנהל יומן משפחתי: חוגים, מבחנים, ימי הולדת, תורנויות. הסוכן מתאם בין כל הלוחות, מזהה קונפליקטים, ושולח תזכורת בוקר ל-WhatsApp: "היום: נעם - שחייה, מיה - מבחן מתמטיקה".
+                        </div>
+                    </div>
+                    <div class="example-ecosystem">
+                        <div class="example-ecosystem-title">🔧 האקוסיסטם שנבנה בהדרגה:</div>
+                        <div class="ecosystem-components">
+                            <span class="ecosystem-tag">CLAUDE.md עם פרטי המשפחה</span>
+                            <span class="ecosystem-tag">חיבור ל-Google Calendar</span>
+                            <span class="ecosystem-tag">סקיל תזכורת בוקר</span>
+                            <span class="ecosystem-tag">חיבור WhatsApp</span>
+                        </div>
+                    </div>
+                    <div class="example-result">
+                        <div class="example-result-label">התוצאה:</div>
+                        <div class="example-result-text">"סוף סוף <strong>לא שוכחים שום דבר</strong> - והילדים מרגישים שרואים אותם"</div>
+                    </div>
+                </div>
+
+                <!-- Example 4: Writer -->
+                <div class="example-card reveal">
+                    <div class="example-header">
+                        <span class="example-icon">✍️</span>
+                        <div>
+                            <div class="example-title">הסופרת שכותבת ספר</div>
+                            <div class="example-role">כותבת פנטזיה</div>
+                        </div>
+                    </div>
+                    <div class="example-scenario">
+                        <div class="example-scenario-label">📋 הסיטואציה</div>
+                        <div class="example-scenario-text">
+                            כותבת סדרת פנטזיה עם 40 דמויות. הסוכן מכיר את כולן - היסטוריה, מערכות יחסים, סודות. "מה הקשר בין אלינור לדוכס?" - ומקבלת תשובה מיידית עם הפניות לפרקים.
+                        </div>
+                    </div>
+                    <div class="example-ecosystem">
+                        <div class="example-ecosystem-title">🔧 האקוסיסטם שנבנה בהדרגה:</div>
+                        <div class="ecosystem-components">
+                            <span class="ecosystem-tag">קובץ דמויות מפורט</span>
+                            <span class="ecosystem-tag">ציר זמן עלילתי</span>
+                            <span class="ecosystem-tag">מפת עולם</span>
+                            <span class="ecosystem-tag">סקיל בדיקת עקביות</span>
+                            <span class="ecosystem-tag">סקיל רעיונות לפרק</span>
+                        </div>
+                    </div>
+                    <div class="example-result">
+                        <div class="example-result-label">התוצאה:</div>
+                        <div class="example-result-text">"יש לי <strong>עורך אישי שמכיר את העולם שלי</strong> טוב ממני"</div>
+                    </div>
+                </div>
+
+                <!-- Example 5: Therapist -->
+                <div class="example-card reveal">
+                    <div class="example-header">
+                        <span class="example-icon">🧠</span>
+                        <div>
+                            <div class="example-title">הפסיכולוג המלווה</div>
+                            <div class="example-role">מטפל פרטי</div>
+                        </div>
+                    </div>
+                    <div class="example-scenario">
+                        <div class="example-scenario-label">📋 הסיטואציה</div>
+                        <div class="example-scenario-text">
+                            אחרי כל פגישה, מכתיב סיכום קצר. הסוכן מארגן את הסיכומים, עוקב אחרי נושאים חוזרים, ומכין "דף הכנה" לפני כל פגישה: "בפגישה האחרונה דיברתם על... נקודות לשים לב..."
+                        </div>
+                    </div>
+                    <div class="example-ecosystem">
+                        <div class="example-ecosystem-title">🔧 האקוסיסטם שנבנה בהדרגה:</div>
+                        <div class="ecosystem-components">
+                            <span class="ecosystem-tag">תיקייה לכל מטופל</span>
+                            <span class="ecosystem-tag">סקיל תמלול סיכום</span>
+                            <span class="ecosystem-tag">סקיל זיהוי דפוסים</span>
+                            <span class="ecosystem-tag">סקיל הכנה לפגישה</span>
+                        </div>
+                    </div>
+                    <div class="example-result">
+                        <div class="example-result-label">התוצאה:</div>
+                        <div class="example-result-text">"אני נכנס לפגישה <strong>מוכן ומרוכז</strong> - לא צריך לדפדף בהערות"</div>
+                    </div>
+                </div>
+
+                <!-- Example 6: Music Teacher -->
+                <div class="example-card reveal">
+                    <div class="example-header">
+                        <span class="example-icon">🎸</span>
+                        <div>
+                            <div class="example-title">מורה למוזיקה</div>
+                            <div class="example-role">מורה פרטי לגיטרה</div>
+                        </div>
+                    </div>
+                    <div class="example-scenario">
+                        <div class="example-scenario-label">📋 הסיטואציה</div>
+                        <div class="example-scenario-text">
+                            מלמד 25 תלמידים ברמות שונות. הסוכן יודע מה כל תלמיד למד, איפה הוא נתקע, ומה השיר הבא שמתאים לו. "מה ללמד את דני היום?" - ומקבל תוכנית שיעור מותאמת.
+                        </div>
+                    </div>
+                    <div class="example-ecosystem">
+                        <div class="example-ecosystem-title">🔧 האקוסיסטם שנבנה בהדרגה:</div>
+                        <div class="ecosystem-components">
+                            <span class="ecosystem-tag">פרופיל מוזיקלי לכל תלמיד</span>
+                            <span class="ecosystem-tag">ספריית שירים לפי רמה</span>
+                            <span class="ecosystem-tag">סקיל תוכנית שיעור</span>
+                            <span class="ecosystem-tag">מעקב התקדמות</span>
+                        </div>
+                    </div>
+                    <div class="example-result">
+                        <div class="example-result-label">התוצאה:</div>
+                        <div class="example-result-text">"כל תלמיד מרגיש <strong>שהשיעור נבנה בדיוק בשבילו</strong>"</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cumulative Effect Section -->
+        <section class="cumulative" id="cumulative">
+            <h2 class="section-title reveal">האפקט <span>המצטבר</span></h2>
+            <p class="section-subtitle reveal">כל שכבה מכפילה את הערך</p>
+
+            <div class="cumulative-visual">
+                <div class="cumulative-bar"><span class="label">תיקייה</span></div>
+                <div class="cumulative-bar"><span class="label">מידע</span></div>
+                <div class="cumulative-bar"><span class="label">CLAUDE</span></div>
+                <div class="cumulative-bar"><span class="label">סקיל</span></div>
+                <div class="cumulative-bar"><span class="label">ערימה</span></div>
+                <div class="cumulative-bar"><span class="label">כלים</span></div>
+                <div class="cumulative-bar"><span class="label">GitHub</span></div>
+                <div class="cumulative-bar"><span class="label">מערכת</span></div>
+            </div>
+
+            <p class="cumulative-message reveal">
+                לא <strong>1+1+1 = 3</strong><br>
+                אלא <strong>1×2×2×2 = 8, 16, 32...</strong>
+            </p>
+        </section>
+
+        <!-- Result Section -->
+        <section class="result" id="result">
+            <h2 class="section-title reveal">התוצאה</h2>
+
+            <div class="result-equation reveal">
+                <div class="equation-part">ידע</div>
+                <span class="equation-operator">+</span>
+                <div class="equation-part">יכולות</div>
+                <span class="equation-operator">+</span>
+                <div class="equation-part">חיבורים</div>
+                <span class="equation-operator">=</span>
+                <div class="equation-result">אפס חיכוך</div>
+            </div>
+
+            <p class="section-subtitle reveal">לא 10% יותר מהר — אלא</p>
+            <div class="result-multiplier reveal">X10 - X100</div>
+        </section>
+    </main>
+
+    <footer>
+        <p><span class="brand">Aviz - The Architect</span> | אפס חיכוך 2026</p>
+    </footer>
+
+    <script>
+        // Generate Stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 120;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 2 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                star.style.setProperty('--base-opacity', Math.random() * 0.3 + 0.1);
+                star.style.setProperty('--peak-opacity', Math.random() * 0.5 + 0.5);
+                starsContainer.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        // Intersection Observer for Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.reveal, .flow-step, .tip-card, .cumulative-bar, .ladder-step').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Effect for Orbs
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            orbs.forEach((orb, i) => {
+                const speed = (i + 1) * 20;
+                orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
